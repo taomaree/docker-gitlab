@@ -1,3 +1,18 @@
+FROM ubuntu:bionic as Build1
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+      wget ca-certificates apt-transport-https gnupg 
+      
+FROM ubuntu:bionic as Build2
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+      wget ca-certificates apt-transport-https gnupg 
+      
+FROM ubuntu:bionic as Build3
+RUN apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+      wget ca-certificates apt-transport-https gnupg 
+      
 FROM ubuntu:bionic
 
 ARG BUILD_DATE
