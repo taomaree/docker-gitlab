@@ -2,7 +2,7 @@ FROM ubuntu:xenial-20190222
 
 ARG BUILD_DATE
 ARG VCS_REF
-ARG VERSION=11.9.5
+ARG VERSION=11.9.8
 
 ENV GITLAB_VERSION=${VERSION} \
     RUBY_VERSION=2.5 \
@@ -47,7 +47,7 @@ RUN apt-get update \
       git-core gnupg2 ruby${RUBY_VERSION} python2.7 python-docutils nodejs yarn gettext-base \
       libmysqlclient20 libpq5 zlib1g libyaml-0-2 libssl1.0.0 \
       libgdbm3 libreadline6 libncurses5 libffi6 \
-      libxml2 libxslt1.1 libcurl3 libicu55 libre2-dev tzdata unzip \
+      libxml2 libxslt1.1 libcurl3 libicu55 libre2-dev tzdata unzip libimage-exiftool-perl \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && locale-gen en_US.UTF-8 \
  && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
