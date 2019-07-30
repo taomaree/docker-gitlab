@@ -56,6 +56,7 @@ RUN apt-get update \
  && gem install --no-document bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
 
+
 COPY assets/build/ ${GITLAB_BUILD_DIR}/
 RUN bash ${GITLAB_BUILD_DIR}/install.sh
 
