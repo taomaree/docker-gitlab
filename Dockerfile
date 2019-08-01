@@ -50,6 +50,7 @@ RUN apt-get update \
       libgdbm-dev libreadline-dev libicu-dev libncurses5 libffi6 \
       libxml2 libxslt1.1 libre2-dev tzdata unzip libimage-exiftool-perl \
       python3-requests python3-jenkins python3-gitlab \
+ && pip3 install jenkinsapi \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && locale-gen en_US.UTF-8 \
  && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
