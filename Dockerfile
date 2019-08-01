@@ -49,7 +49,7 @@ RUN apt-get update \
       libmysqlclient20 libpq5 zlib1g libyaml-0-2 libssl1.0.0 \
       libgdbm-dev libreadline-dev libicu-dev libncurses5 libffi6 \
       libxml2 libxslt1.1 libre2-dev tzdata unzip libimage-exiftool-perl \
-      python3-requests python3-jenkins python3-gitlab \
+      python3-pip python3-requests python3-jenkins python3-gitlab \
  && pip3 install jenkinsapi \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && locale-gen en_US.UTF-8 \
