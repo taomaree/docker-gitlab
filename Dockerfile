@@ -55,8 +55,7 @@ RUN set -ex && \
  && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
  && gem install --no-document bundler -v 1.17.3 \
  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-      vim python3-setuptools python3-gitlab python3-jenkins \
- && easy_install3 pip \
+      vim python3-setuptools python3-gitlab python3-jenkins python3-pip \
  && pip3 install -U requests  jenkinsapi \
  && rm -rf /var/lib/apt/lists/*
 
