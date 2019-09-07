@@ -1,17 +1,16 @@
-#FROM ubuntu:
-FROM ubuntu:xenial
+FROM ubuntu:bionic-20190807
 
 ARG BUILD_DATE
 ARG VCS_REF
-ARG VERSION=12.0.4
+ARG VERSION=12.2.1
 
 ENV GITLAB_VERSION=${VERSION} \
     RUBY_VERSION=2.6 \
-    GOLANG_VERSION=1.12.6 \
+    GOLANG_VERSION=1.12.9 \
     GITLAB_SHELL_VERSION=9.3.0 \
-    GITLAB_WORKHORSE_VERSION=8.7.0 \
-    GITLAB_PAGES_VERSION=1.7.0 \
-    GITALY_SERVER_VERSION=1.53.0 \
+    GITLAB_WORKHORSE_VERSION=8.8.0 \
+    GITLAB_PAGES_VERSION=1.7.1 \
+    GITALY_SERVER_VERSION=1.59.0 \
     GITLAB_USER="git" \
     GITLAB_HOME="/home/git" \
     GITLAB_LOG_DIR="/var/log/gitlab" \
@@ -28,36 +27,34 @@ ENV GITLAB_INSTALL_DIR="${GITLAB_HOME}/gitlab" \
 
 RUN apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-      wget ca-certificates apt-transport-https gnupg lsb-release \
- && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
- && echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu $(lsb_release -cs) main" >> /etc/apt/sources.list \
+      wget ca-certificates apt-transport-https gnupg2
+RUN set -ex && \
+ apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E1DD270288B4E6030699E45FA1715D88E1DF1F24 \
+ && echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu bionic main" >> /etc/apt/sources.list \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 80F70E11F0F0D5F10CB20E62F5DA5F09C3173AA6 \
- && echo "deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu $(lsb_release -cs) main" >> /etc/apt/sources.list.d/ruby.list \
+ && echo "deb http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu bionic main" >> /etc/apt/sources.list \
  && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 8B3981E7A6852F782CC4951600A6F0A3C300EE8C \
- && echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu $(lsb_release -cs) main" >> /etc/apt/sources.list.d/nginx.list \
+ && echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu bionic main" >> /etc/apt/sources.list \
  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
- && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+ && echo 'deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
  && wget --quiet -O - https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
- && echo "deb https://deb.nodesource.com/node_8.x $(lsb_release -cs) main" > /etc/apt/sources.list.d/nodesource.list \
+ && echo 'deb https://deb.nodesource.com/node_12.x bionic main' > /etc/apt/sources.list.d/nodesource.list \
  && wget --quiet -O - https://dl.yarnpkg.com/debian/pubkey.gpg  | apt-key add - \
  && echo 'deb https://dl.yarnpkg.com/debian/ stable main' > /etc/apt/sources.list.d/yarn.list \
+ && set -ex \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
       sudo supervisor logrotate locales curl \
-      nginx openssh-server mysql-client postgresql-client redis-tools \
-      git-core gnupg2 ruby${RUBY_VERSION} python3 python3-docutils nodejs yarn gettext-base \
-      libmysqlclient20 libpq5 zlib1g libyaml-0-2 libssl1.0.0 \
-      libgdbm-dev libreadline-dev libicu-dev libncurses5 libffi6 \
-      libxml2 libxslt1.1 libre2-dev tzdata unzip libimage-exiftool-perl \
-      vim python3-setuptools python3-gitlab python3-jenkins \
- && easy_install3 pip \
- && pip3 install -U requests  jenkinsapi \
+      nginx openssh-server postgresql-client-10 postgresql-contrib-10 redis-tools \
+      git-core ruby${RUBY_VERSION} python3 python3-docutils nodejs yarn gettext-base graphicsmagick \
+      libpq5 zlib1g libyaml-0-2 libssl1.0.0 \
+      libgdbm5 libreadline7 libncurses5 libffi6 \
+      libxml2 libxslt1.1 libcurl4 libicu60 libre2-dev tzdata unzip libimage-exiftool-perl \
  && update-locale LANG=C.UTF-8 LC_MESSAGES=POSIX \
  && locale-gen en_US.UTF-8 \
  && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales \
  && gem install --no-document bundler -v 1.17.3 \
  && rm -rf /var/lib/apt/lists/*
-
 
 COPY assets/build/ ${GITLAB_BUILD_DIR}/
 RUN bash ${GITLAB_BUILD_DIR}/install.sh
